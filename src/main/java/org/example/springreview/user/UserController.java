@@ -1,9 +1,11 @@
 package org.example.springreview.user;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.springreview.CommonResponseDto;
+import org.example.springreview.jwt.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,6 +21,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/users")
     public ResponseEntity<CommonResponseDto> signup(@Valid @RequestBody UserRequestDto requestDto, BindingResult bindingResult){
@@ -38,6 +41,15 @@ public class UserController {
     public ResponseEntity<CommonResponseDto> checkUsername(@PathVariable String username) {
         userService.checkUsername(username);
         return ResponseEntity.status(HttpStatus.OK.value()).body(new CommonResponseDto("사용가능한 닉네임입니다.", HttpStatus.OK.value()));
+    }
+
+    @PostMapping("users/login")
+    public ResponseEntity<CommonResponseDto> login(@RequestBody UserRequestDto requestDto, HttpServletResponse response) {
+        userService.login(requestDto);
+
+        jwtUtil.addJwtToCookie(jwtUtil.createToken(requestDto.getUsername()), response);
+
+        return ResponseEntity.status(HttpStatus.OK.value()).body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
     }
 
 }
