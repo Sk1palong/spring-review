@@ -40,4 +40,19 @@ public class UserService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_USER);
         }
     }
+
+    public void login(UserRequestDto requestDto) {
+        String username = requestDto.getUsername();
+        String password = requestDto.getPassword();
+
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                ()-> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHES);
+        }
+
+    }
 }
