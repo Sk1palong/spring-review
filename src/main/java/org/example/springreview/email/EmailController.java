@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
     private final MailSendService mailService;
 
-    @PostMapping("/api/users/mailSend")
+    @PostMapping("/api/users/mail")
     public String mailSend(@RequestBody @Valid EmailRequestDto emailDto) {
         System.out.println("이메일 인증 이메일 :" + emailDto.getEmail());
         return mailService.joinEmail(emailDto.getEmail());
     }
 
-    @PostMapping("/api/users/mailAuthCheck")
+    @PostMapping("/api/users/mail/auth")
     public String AuthCheck(@RequestBody @Valid EmailCheckDto emailCheckDto){
         Boolean Checked = mailService.CheckAuthNum(emailCheckDto.getEmail(),emailCheckDto.getAuthNum());
         if(Checked){
