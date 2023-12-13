@@ -2,6 +2,11 @@ package org.example.springreview.email;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.springreview.CommonResponseDto;
+import org.example.springreview.exception.CustomException;
+import org.example.springreview.exception.ErrorCode;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,13 +23,13 @@ public class EmailController {
     }
 
     @PostMapping("/api/users/mail/auth")
-    public String AuthCheck(@RequestBody @Valid EmailCheckDto emailCheckDto){
+    public ResponseEntity<CommonResponseDto> AuthCheck(@RequestBody @Valid EmailCheckDto emailCheckDto){
         Boolean Checked = mailService.CheckAuthNum(emailCheckDto.getEmail(),emailCheckDto.getAuthNum());
         if(Checked){
-            return "ok";
+            return ResponseEntity.status(HttpStatus.OK.value()).body(new CommonResponseDto("인증이 완료되었습니다", HttpStatus.OK.value()));
         }
         else{
-            throw new NullPointerException("뭔가 잘못!");
+            throw new CustomException(ErrorCode.EMAIL_AUTH_FAIL);
         }
     }
 }
