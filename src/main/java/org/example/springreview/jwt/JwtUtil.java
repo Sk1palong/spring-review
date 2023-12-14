@@ -10,9 +10,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.Key;
 import java.util.Base64;
@@ -21,11 +21,14 @@ import java.util.Date;
 @Slf4j
 @Component
 public class JwtUtil {
+
+    // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
+    // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
 
-    @Value("${jwt.secret.key}")
+    @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
     private String secretKey;
 
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -36,14 +39,6 @@ public class JwtUtil {
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
-    }
-
-    public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
-        }
-        return null;
     }
 
     public boolean validateToken(String token) {
@@ -69,6 +64,7 @@ public class JwtUtil {
     public String createToken(String username) {
         Date date = new Date();
 
+        // 토큰 만료시간 60분
         long TOKEN_TIME = 60 * 60 * 1000;
         return BEARER_PREFIX +
                 Jwts.builder()
@@ -78,6 +74,8 @@ public class JwtUtil {
                         .signWith(key, signatureAlgorithm)
                         .compact();
     }
+
+    // JWT Cookie 에 저장
     public void addJwtToCookie(String token, HttpServletResponse res) {
         try {
             token = URLEncoder.encode(token, "UTF-8").replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
@@ -91,4 +89,22 @@ public class JwtUtil {
             log.error(e.getMessage());
         }
     }
+
+    // HttpServletRequest 에서 Cookie Value : JWT 가져오기
+    public String getTokenFromRequest(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
+                    try {//FU//
+                        return URLDecoder.decode(cookie.getValue().replaceAll("Bearer%20", ""), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
+                    } catch (UnsupportedEncodingException e) {
+                        return null;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
 }
