@@ -21,8 +21,7 @@ public class PostService {
         Post post = new Post(requestDto);
 
         post.setUser(user);
-        System.out.println(post.getContents());
-        System.out.println(post.getUser().getUsername());
+
         Post savePost = postRepository.save(post);
 
         return new PostResponseDto(savePost);
