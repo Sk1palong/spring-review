@@ -23,6 +23,8 @@ public class Post extends Timestamped {
     @Column(length = 5000)
     private String contents;
 
+    private String username;
+
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
@@ -43,7 +45,10 @@ public class Post extends Timestamped {
      */
     public void setUser(User user) {
         this.user = user;
+        this.username = user.getUsername();
     }
+
+
 
     /**
      * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
