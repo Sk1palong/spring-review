@@ -1,1 +1,2 @@
-![스크린샷 2023-12-12 오후 2.29.10.png](..%2F..%2F..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202023-12-12%20%EC%98%A4%ED%9B%84%202.29.10.png)
+![스크린샷 2023-12-15 오후 4 35 29](https://github.com/Sk1palong/spring-review/assets/133875448/dbca2ebb-8048-4741-bac8-ea7d80dc7c26)
+![스크린샷 2023-12-15 오후 4 35 16](https://github.com/Sk1palong/spring-review/assets/133875448/acf678c1-ed7f-480c-892e-1eae0d86d9f0)
