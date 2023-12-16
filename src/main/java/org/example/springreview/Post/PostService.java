@@ -46,5 +46,4 @@ public class PostService {
 
         return postList.map(PostResponseDto::new);
     }
-
 }
