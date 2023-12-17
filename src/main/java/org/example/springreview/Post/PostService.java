@@ -41,7 +41,7 @@ public class PostService {
 
                 String contentType = file.getContentType();
 
-                String fullPath = "/Users/Home/Desktop/Image/" + originalFilename;
+                String fullPath = "/Users/Home/Desktop/Coding/prac/spring-review/src/main/resources/static/image/" + originalFilename;
 
                 Image image = new Image(originalFilename, originalFilename, fullPath, size, contentType);
                 image.setPost(savePost);
