@@ -95,9 +95,22 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
+    @Transactional
+    public void deletePost(Long postId, User user) {
+        Post post = findPostById(postId);
+
+        if (!user.equals(post.getUser())) {
+            throw new CustomException(ErrorCode.USER_NOT_MATCHES);
+        }
+
+        postRepository.delete(post);
+    }
+
     public Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
     }
+
+
 }

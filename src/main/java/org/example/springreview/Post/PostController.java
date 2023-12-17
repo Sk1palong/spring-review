@@ -1,6 +1,7 @@
 package org.example.springreview.Post;
 
 import lombok.RequiredArgsConstructor;
+import org.example.springreview.CommonResponseDto;
 import org.example.springreview.security.UserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,13 @@ public class PostController {
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         return ResponseEntity.status(HttpStatus.OK).body(postService.updatePost(postId, requestDto, userDetails.getUser()));
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<CommonResponseDto> deletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.deletePost(postId, userDetails.getUser());
+
+        return ResponseEntity.status(HttpStatus.OK.value()).body(new CommonResponseDto(postId + "번 게시글이 삭제되었습니다.", HttpStatus.OK.value()));
     }
 }
 
