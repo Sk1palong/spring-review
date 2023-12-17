@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    USER_NOT_MATCHES(HttpStatus.UNAUTHORIZED, "본인의 게시글만 수정할 수 있습니다."),
     EMAIL_AUTH_FAIL(HttpStatus.BAD_REQUEST, "인증에 실패했습니다"),
     PASSWORD_NOT_MATCHES(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     ALREADY_EXIST_USER(HttpStatus.CONFLICT,"중복된 닉네임 입니다."),
