@@ -2,6 +2,8 @@ package org.example.springreview.Post;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.springreview.exception.CustomException;
+import org.example.springreview.exception.ErrorCode;
 import org.example.springreview.image.Image;
 import org.example.springreview.image.ImageRepository;
 import org.example.springreview.user.User;
@@ -72,5 +74,13 @@ public class PostService {
         Page<Post> postList = postRepository.findAll(pageable);
 
         return postList.map(PostResponseDto::new);
+    }
+
+    public PostResponseDto getPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
+        );
+
+        return new PostResponseDto(post);
     }
 }
