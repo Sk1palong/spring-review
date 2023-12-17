@@ -64,4 +64,9 @@ public class Post extends Timestamped {
             image.setPost(this);
         }
     }
+
+    public void updatePost(PostRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
+    }
 }

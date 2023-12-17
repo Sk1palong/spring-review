@@ -77,10 +77,27 @@ public class PostService {
     }
 
     public PostResponseDto getPost(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
-        );
+        Post post = findPostById(postId);
 
         return new PostResponseDto(post);
+    }
+
+    @Transactional
+    public PostResponseDto updatePost(Long postId, PostRequestDto requestDto, User user) {
+        Post post = findPostById(postId);
+
+        if(!user.equals(post.getUser())){
+            throw new CustomException(ErrorCode.USER_NOT_MATCHES);
+        }
+
+        post.updatePost(requestDto);
+
+        return new PostResponseDto(post);
+    }
+
+    public Post findPostById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(
+                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
+        );
     }
 }
