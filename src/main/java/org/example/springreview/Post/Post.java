@@ -14,12 +14,14 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class Post extends Timestamped {
-    /**
-     * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
-     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /**
+     * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
+     */
 
     @Column(length = 500)
     private String title;
