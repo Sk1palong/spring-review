@@ -46,7 +46,8 @@ public class PostService {
                 String fullPath = "/Users/Home/Desktop/Coding/prac/spring-review/src/main/resources/static/image/" + originalFilename;
 
                 Image image = new Image(originalFilename, originalFilename, fullPath, size, contentType);
-                image.setPost(savePost);
+                image.setPost(post);
+                post.createImage(image);
                 imageRepository.save(image);
 
                 file.transferTo(new File(fullPath));
@@ -54,7 +55,6 @@ public class PostService {
         }
 
         return new PostResponseDto(savePost);
-
     }
 
     public Page<PostResponseDto> getPostList(int page, int size, List<String> sort) {
@@ -99,7 +99,7 @@ public class PostService {
     public void deletePost(Long postId, User user) {
         Post post = findPostById(postId);
 
-        if (!user.equals(post.getUser())) {
+        if (!user.getId().equals(post.getUser().getId())) {
             throw new CustomException(ErrorCode.USER_NOT_MATCHES);
         }
 
@@ -107,10 +107,9 @@ public class PostService {
     }
 
     public Post findPostById(Long postId) {
+
         return postRepository.findById(postId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
     }
-
-
 }

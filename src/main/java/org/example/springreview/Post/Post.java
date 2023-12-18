@@ -9,6 +9,7 @@ import org.example.springreview.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -46,7 +47,7 @@ public class Post extends Timestamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
     /**
@@ -62,7 +63,7 @@ public class Post extends Timestamped {
      */
     public void createImage(Image image) {
         this.images.add(image);
-        if(!image.getPost().equals(this)) {
+        if (!Objects.equals(image.getPost().getId(), this.getId())) {
             image.setPost(this);
         }
     }
