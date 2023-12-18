@@ -1,6 +1,7 @@
 package org.example.springreview.comment;
 
 import lombok.RequiredArgsConstructor;
+import org.example.springreview.CommonResponseDto;
 import org.example.springreview.security.UserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,8 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> createComment(
             @PathVariable Long postId,
             @RequestBody CommentRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(commentService.createComment(postId, requestDto, userDetails.getUser()));
     }
     @GetMapping("/comments")
@@ -30,8 +31,8 @@ public class CommentController {
             @PathVariable Long postId,
             @RequestParam("page") int page,
             @RequestParam("size") int size,
-            @RequestParam(value = "sort", defaultValue = "createdAt,desc") List<String> sort) {
-
+            @RequestParam(value = "sort", defaultValue = "createdAt,desc") List<String> sort
+    ) {
         Page<CommentResponseDto> comments = commentService.getComments(postId, page-1, size, sort);
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(comments);
@@ -42,9 +43,20 @@ public class CommentController {
             @PathVariable Long postId,
             @PathVariable Long commentId,
             @RequestBody CommentRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
         return ResponseEntity.status(HttpStatus.OK.value()).body(commentService.updateComment(postId, commentId, requestDto, userDetails.getUser()));
 
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<CommonResponseDto> deleteComment(
+            @PathVariable Long postId,
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        commentService.deleteComment(postId, commentId, userDetails.getUser());
+
+        return ResponseEntity.status(HttpStatus.OK.value()).body(new CommonResponseDto(commentId + "번 댓글이 삭제 되었습니다.", HttpStatus.OK.value()));
     }
 }

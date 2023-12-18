@@ -6,6 +6,7 @@ import org.example.springreview.Post.Post;
 import org.example.springreview.Post.PostRepository;
 import org.example.springreview.exception.CustomException;
 import org.example.springreview.exception.ErrorCode;
+import org.example.springreview.security.UserDetailsImpl;
 import org.example.springreview.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,7 +38,7 @@ public class CommentService {
         return new CommentResponseDto(saveComment);
     }
     public Page<CommentResponseDto> getComments(Long postId, int page, int size, List<String> sort) {
-        Post post = findPostById(postId);
+        findPostById(postId);
 
         List<Sort.Order> orders = sort.stream()
                 .map(s -> {
@@ -58,17 +59,26 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto updateComment(Long postId, Long commentId, CommentRequestDto requestDto, User user) {
-        Post post = findPostById(postId);
+        findPostById(postId);
 
         Comment comment = findCommentById(commentId);
 
-        if (!comment.getUser().getId().equals(user.getId())) {
-            throw new CustomException(ErrorCode.USER_NOT_MATCHES);
-        }
+        isSameUser(user, comment);
 
         comment.updateComment(requestDto);
 
         return new CommentResponseDto(comment);
+    }
+
+    @Transactional
+    public void deleteComment(Long postId, Long commentId, User user) {
+        findPostById(postId);
+
+        Comment comment = findCommentById(commentId);
+
+        isSameUser(user, comment);
+
+        commentRepository.delete(comment);
     }
 
     private Comment findCommentById(Long commentId) {
@@ -81,5 +91,11 @@ public class CommentService {
         return postRepository.findById(postId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
+    }
+
+    public void isSameUser(User user, Comment comment) {
+        if (!comment.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.USER_NOT_MATCHES);
+        }
     }
 }
