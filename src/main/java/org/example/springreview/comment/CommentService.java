@@ -1,5 +1,6 @@
 package org.example.springreview.comment;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.springreview.Post.Post;
 import org.example.springreview.Post.PostRepository;
@@ -55,11 +56,30 @@ public class CommentService {
         return comments.map(CommentResponseDto::new);
     }
 
+    @Transactional
+    public CommentResponseDto updateComment(Long postId, Long commentId, CommentRequestDto requestDto, User user) {
+        Post post = findPostById(postId);
+
+        Comment comment = findCommentById(commentId);
+
+        if (!comment.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.USER_NOT_MATCHES);
+        }
+
+        comment.updateComment(requestDto);
+
+        return new CommentResponseDto(comment);
+    }
+
+    private Comment findCommentById(Long commentId) {
+        return commentRepository.findById(commentId).orElseThrow(
+                () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
+        );
+    }
+
     public Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
     }
-
-
 }
