@@ -6,7 +6,14 @@ import org.example.springreview.Post.PostRepository;
 import org.example.springreview.exception.CustomException;
 import org.example.springreview.exception.ErrorCode;
 import org.example.springreview.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +35,31 @@ public class CommentService {
 
         return new CommentResponseDto(saveComment);
     }
+    public Page<CommentResponseDto> getComments(Long postId, int page, int size, List<String> sort) {
+        Post post = findPostById(postId);
+
+        List<Sort.Order> orders = sort.stream()
+                .map(s -> {
+                    String[] parts = s.split(",");
+                    return new Sort.Order(
+                            "asc".equalsIgnoreCase(parts[1]) ? Sort.Direction.ASC : Sort.Direction.DESC,
+                            parts[0]
+                    );
+                })
+                .collect(Collectors.toList());
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
+
+        Page<Comment> comments = commentRepository.findAll(pageable);
+
+        return comments.map(CommentResponseDto::new);
+    }
 
     public Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
     }
+
+
 }
