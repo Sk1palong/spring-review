@@ -45,6 +45,7 @@ public class Comment extends Timestamped {
      */
     public void setPost(Post post) {
         this.post = post;
+        post.getComments().add(this);
     }
 
     public void setUser(User user) {
