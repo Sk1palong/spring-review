@@ -12,8 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,6 +81,17 @@ public class CommentService {
         isSameUser(user, comment);
 
         commentRepository.delete(comment);
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void deleteOldComments() {
+
+        LocalDateTime ninetyDaysAgo = LocalDateTime.now().minusDays(90);
+
+        List<Comment> oldComments = commentRepository.findAllByModifiedAtBefore(ninetyDaysAgo);
+
+        commentRepository.deleteAll(oldComments);
     }
 
     private Comment findCommentById(Long commentId) {
