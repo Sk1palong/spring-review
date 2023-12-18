@@ -1,2 +1,2 @@
-![스크린샷 2023-12-15 오후 4 35 16](https://github.com/Sk1palong/spring-review/assets/133875448/acf678c1-ed7f-480c-892e-1eae0d86d9f0)
-![스크린샷 2023-12-15 오후 4 35 29](https://github.com/Sk1palong/spring-review/assets/133875448/dbca2ebb-8048-4741-bac8-ea7d80dc7c26)
+![스크린샷 2023-12-18 오후 11 05 36](https://github.com/Sk1palong/spring-review/assets/133875448/c38c17ac-2f6b-4e8d-be16-5b581a3a08b2)
+![스크린샷 2023-12-18 오후 11 05 54](https://github.com/Sk1palong/spring-review/assets/133875448/9a37e596-78d5-44d9-a042-b1240c13affd)
