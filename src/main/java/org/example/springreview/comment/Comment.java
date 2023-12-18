@@ -22,6 +22,8 @@ public class Comment extends Timestamped {
      */
     private String contents;
 
+    private String username;
+
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
@@ -45,10 +47,12 @@ public class Comment extends Timestamped {
      */
     public void setPost(Post post) {
         this.post = post;
+        post.getComments().add(this);
     }
 
     public void setUser(User user) {
         this.user = user;
+        this.username = user.getUsername();
     }
 
     /**
