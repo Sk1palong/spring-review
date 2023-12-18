@@ -29,7 +29,7 @@ public class CommentService {
         return new CommentResponseDto(saveComment);
     }
 
-    private Post findPostById(Long postId) {
+    public Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
