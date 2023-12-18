@@ -11,11 +11,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -86,7 +88,7 @@ public class PostService {
     public PostResponseDto updatePost(Long postId, PostRequestDto requestDto, User user) {
         Post post = findPostById(postId);
 
-        if(!user.equals(post.getUser())){
+        if(!user.getId().equals(post.getUser().getId())){
             throw new CustomException(ErrorCode.USER_NOT_MATCHES);
         }
 
@@ -111,5 +113,16 @@ public class PostService {
         return postRepository.findById(postId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void deleteOldPosts() {
+
+        LocalDateTime ninetyDaysAgo = LocalDateTime.now().minusDays(90);
+
+        List<Post> oldPosts = postRepository.findAllByModifiedAtBefore(ninetyDaysAgo);
+
+        postRepository.deleteAll(oldPosts);
     }
 }
