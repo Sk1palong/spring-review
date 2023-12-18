@@ -3,6 +3,8 @@ package org.example.springreview.comment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class CommentResponseDto {
@@ -16,5 +18,11 @@ public class CommentResponseDto {
         this.contents = comment.getContents();
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
+    }
+
+    public static List<CommentResponseDto> mapToDtoList(List<Comment> comments) {
+        return comments.stream()
+                .map(CommentResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
