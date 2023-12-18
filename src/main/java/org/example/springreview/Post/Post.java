@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.example.springreview.Timestamped;
 import org.example.springreview.comment.Comment;
 import org.example.springreview.image.Image;
+import org.example.springreview.like.PostLike;
 import org.example.springreview.user.User;
 
 import java.util.ArrayList;
@@ -53,6 +54,9 @@ public class Post extends Timestamped {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostLike> postLikes;
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
      */
