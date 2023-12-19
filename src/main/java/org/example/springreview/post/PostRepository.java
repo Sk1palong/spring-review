@@ -1,4 +1,4 @@
-package org.example.springreview.Post;
+package org.example.springreview.post;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

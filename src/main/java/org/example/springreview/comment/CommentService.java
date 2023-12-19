@@ -2,11 +2,10 @@ package org.example.springreview.comment;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.springreview.Post.Post;
-import org.example.springreview.Post.PostRepository;
+import org.example.springreview.post.Post;
+import org.example.springreview.post.PostRepository;
 import org.example.springreview.exception.CustomException;
 import org.example.springreview.exception.ErrorCode;
-import org.example.springreview.security.UserDetailsImpl;
 import org.example.springreview.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

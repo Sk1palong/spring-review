@@ -1,8 +1,8 @@
 package org.example.springreview.like;
 
 import lombok.RequiredArgsConstructor;
-import org.example.springreview.Post.Post;
-import org.example.springreview.Post.PostRepository;
+import org.example.springreview.post.Post;
+import org.example.springreview.post.PostRepository;
 import org.example.springreview.exception.CustomException;
 import org.example.springreview.exception.ErrorCode;
 import org.example.springreview.user.User;

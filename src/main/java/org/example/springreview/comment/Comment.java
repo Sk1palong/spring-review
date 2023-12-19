@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.springreview.Post.Post;
+import org.example.springreview.post.Post;
 import org.example.springreview.Timestamped;
 import org.example.springreview.user.User;
 
