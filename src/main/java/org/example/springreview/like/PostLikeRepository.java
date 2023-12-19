@@ -1,6 +1,6 @@
 package org.example.springreview.like;
 
-import org.example.springreview.Post.Post;
+import org.example.springreview.post.Post;
 import org.example.springreview.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
